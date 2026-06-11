@@ -1,223 +1,227 @@
-Klar — hier der komplette HTML-Code als iPhone-optimierte Safari-Web-App:
+VMG Code mit mehreren Personen-Zeilen, individuellen Tagen und Faktoren je Person:
 
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Grill-Rechner">
-  <meta name="theme-color" content="#f2f2f7">
-  <title>Grill-Rechner</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-    body {
-      margin: 0;
-      padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif;
-      background: #f2f2f7;
-      color: #1c1c1e;
-    }
-    .app {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 20px 0 32px;
-    }
-    .card {
-      background: #ffffff;
-      border-radius: 24px;
-      padding: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
-    h1 {
-      text-align: center;
-      font-size: 30px;
-      margin: 12px 0 20px;
-    }
-    h2 {
-      margin-top: 0;
-      font-size: 22px;
-    }
-    label {
-      display: block;
-      font-weight: 700;
-      margin-top: 18px;
-      margin-bottom: 8px;
-    }
-    input[type="text"] {
-      width: 100%;
-      min-height: 48px;
-      padding: 12px 14px;
-      border: 1px solid #d1d1d6;
-      border-radius: 14px;
-      font-size: 16px;
-      background: #fff;
-    }
-    input[type="range"] {
-      width: 100%;
-      margin-top: 8px;
-    }
-    .value {
-      font-size: 20px;
-      font-weight: 800;
-      margin-top: 6px;
-    }
-    .buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    button {
-      min-height: 52px;
-      padding: 12px;
-      border: none;
-      border-radius: 16px;
-      font-size: 16px;
-      font-weight: 700;
-      background: #e5e5ea;
-      color: #1c1c1e;
-    }
-    button.active {
-      background: #1c1c1e;
-      color: #ffffff;
-    }
-    .result {
-      background: #fff7e8;
-    }
-    .item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-      padding: 13px 0;
-      font-size: 18px;
-    }
-    .item:last-child {
-      border-bottom: none;
-    }
-    .item strong {
-      font-size: 20px;
-    }
-    .hint {
-      font-size: 13px;
-      color: #6e6e73;
-      line-height: 1.4;
-      margin-top: 14px;
-    }
-    .total {
-      text-align: center;
-      font-size: 17px;
-      font-weight: 700;
-      margin-top: 10px;
-      color: #444;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Grill-Rechner">
+<title>Grill-Rechner</title>
+<style>
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  margin: 0;
+  padding: env(safe-area-inset-top) 14px env(safe-area-inset-bottom) 14px;
+  font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  background: #f2f2f7;
+  color: #1c1c1e;
+}
+.app { max-width: 520px; margin: auto; padding-bottom: 30px; }
+h1 { text-align: center; font-size: 28px; }
+.card {
+  background: white;
+  border-radius: 22px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+.person {
+  border: 1px solid #ddd;
+  border-radius: 18px;
+  padding: 14px;
+  margin-bottom: 14px;
+  background: #fafafa;
+}
+.row {
+  display: grid;
+  grid-template-columns: 1fr 90px;
+  gap: 10px;
+}
+input {
+  width: 100%;
+  min-height: 44px;
+  font-size: 16px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+label {
+  font-weight: 700;
+  font-size: 14px;
+  margin-top: 10px;
+  display: block;
+}
+.factor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+button {
+  min-height: 46px;
+  border-radius: 14px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  background: #e5e5ea;
+}
+button.active {
+  background: #1c1c1e;
+  color: white;
+}
+.add {
+  width: 100%;
+  background: #007aff;
+  color: white;
+  margin-top: 8px;
+}
+.delete {
+  background: #ff3b30;
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+}
+.result {
+  background: #fff7e8;
+}
+.item {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  padding: 12px 0;
+  font-size: 18px;
+}
+.item strong { font-size: 20px; }
+.small {
+  font-size: 13px;
+  color: #666;
+  margin-top: 12px;
+}
+</style>
 </head>
 <body>
 <div class="app">
   <h1>🔥 Grill-Rechner</h1>
   <div class="card">
-    <h2>Person & Dauer</h2>
-    <label for="name">Name</label>
-    <input type="text" id="name" placeholder="z. B. Kai" oninput="calculate()">
-    <label for="days">Wie viele Tage bleibst du?</label>
-    <input type="range" id="days" min="1" max="14" value="1" oninput="calculate()">
-    <div class="value"><span id="daysValue">1</span> Tag(e)</div>
-    <label for="extraPeople">Weitere Leute, die du mitbringst</label>
-    <input type="range" id="extraPeople" min="0" max="20" value="0" oninput="calculate()">
-    <div class="value">+ <span id="extraPeopleValue">0</span> Person(en)</div>
-    <div class="total">
-      Gesamt: <span id="totalPeopleValue">1</span> Person(en)
-    </div>
-  </div>
-  <div class="card">
-    <h2>Faktoren</h2>
-    <div class="buttons">
-      <button id="diet" onclick="toggleFactor('diet')">🥗 Diät</button>
-      <button id="hungry" onclick="toggleFactor('hungry')">🥩 Hungrig</button>
-      <button id="veryHungry" onclick="toggleFactor('veryHungry')">🔥 Sehr hungrig</button>
-      <button id="thirsty" onclick="toggleFactor('thirsty')">🍺 Durstig</button>
-    </div>
-    <p class="hint">
-      Die Faktoren passen die Mengen automatisch an. Diät reduziert Essen, hungrig und sehr hungrig erhöhen Essen, durstig erhöht Bier.
-    </p>
+    <h2>Teilnehmer</h2>
+    <div id="peopleList"></div>
+    <button class="add" onclick="addPerson()">+ Person hinzufügen</button>
   </div>
   <div class="card result">
-    <h2 id="headline">Mengen</h2>
+    <h2>Gesamtsumme</h2>
     <div class="item">
       <span>Hüftsteak</span>
-      <strong><span id="steak">0</span> kg</strong>
+      <strong><span id="totalSteak">0</span> kg</strong>
     </div>
     <div class="item">
       <span>Würstchen</span>
-      <strong><span id="sausages">0</span> Stück</strong>
+      <strong><span id="totalSausages">0</span> Stück</strong>
     </div>
     <div class="item">
       <span>Bauchspeck</span>
-      <strong><span id="bacon">0</span> kg</strong>
+      <strong><span id="totalBacon">0</span> kg</strong>
     </div>
     <div class="item">
       <span>Bier</span>
-      <strong><span id="beer">0</span> Liter</strong>
+      <strong><span id="totalBeer">0</span> Liter</strong>
     </div>
-    <p class="hint">
-      Basis pro Person und Tag: 250 g Hüftsteak, 2 Würstchen, 150 g Bauchspeck und 3,5 Liter Bier.
+    <p class="small">
+      Basis pro Person und Tag: 250 g Hüftsteak, 2 Würstchen, 150 g Bauchspeck, 3,5 Liter Bier.
     </p>
   </div>
 </div>
 <script>
-  const factors = {
+let people = [];
+function addPerson() {
+  people.push({
+    name: "",
+    days: 1,
     diet: false,
     hungry: false,
     veryHungry: false,
     thirsty: false
-  };
-  function toggleFactor(factor) {
-    factors[factor] = !factors[factor];
-    document.getElementById(factor).classList.toggle("active");
-    calculate();
-  }
-  function calculate() {
-    const name = document.getElementById("name").value.trim() || "Grillfreund";
-    const days = Number(document.getElementById("days").value);
-    const extraPeople = Number(document.getElementById("extraPeople").value);
-    const totalPeople = 1 + extraPeople;
-    document.getElementById("daysValue").innerText = days;
-    document.getElementById("extraPeopleValue").innerText = extraPeople;
-    document.getElementById("totalPeopleValue").innerText = totalPeople;
+  });
+  renderPeople();
+  calculate();
+}
+function deletePerson(index) {
+  people.splice(index, 1);
+  renderPeople();
+  calculate();
+}
+function updatePerson(index, field, value) {
+  people[index][field] = value;
+  calculate();
+}
+function toggleFactor(index, factor) {
+  people[index][factor] = !people[index][factor];
+  renderPeople();
+  calculate();
+}
+function renderPeople() {
+  const list = document.getElementById("peopleList");
+  list.innerHTML = "";
+  people.forEach((person, index) => {
+    const div = document.createElement("div");
+    div.className = "person";
+    div.innerHTML = `
+      <div class="row">
+        <div>
+          <label>Name</label>
+          <input 
+            type="text" 
+            value="${person.name}" 
+            placeholder="Name"
+            oninput="updatePerson(${index}, 'name', this.value)"
+          >
+        </div>
+        <div>
+          <label>Tage</label>
+          <input 
+            type="number" 
+            min="1" 
+            max="30" 
+            value="${person.days}" 
+            oninput="updatePerson(${index}, 'days', Number(this.value))"
+          >
+        </div>
+      </div>
+      <div class="factor-grid">
+        <button class="${person.diet ? "active" : ""}" onclick="toggleFactor(${index}, 'diet')">🥗 Diät</button>
+        <button class="${person.hungry ? "active" : ""}" onclick="toggleFactor(${index}, 'hungry')">🥩 Hungrig</button>
+        <button class="${person.veryHungry ? "active" : ""}" onclick="toggleFactor(${index}, 'veryHungry')">🔥 Sehr hungrig</button>
+        <button class="${person.thirsty ? "active" : ""}" onclick="toggleFactor(${index}, 'thirsty')">🍺 Durstig</button>
+      </div>
+      <button class="delete" onclick="deletePerson(${index})">Person löschen</button>
+    `;
+    list.appendChild(div);
+  });
+}
+function calculate() {
+  let totalSteak = 0;
+  let totalSausages = 0;
+  let totalBacon = 0;
+  let totalBeer = 0;
+  people.forEach(person => {
+    const days = Number(person.days) || 1;
     let foodFactor = 1;
     let drinkFactor = 1;
-    if (factors.diet) {
-      foodFactor *= 0.7;
-    }
-    if (factors.hungry) {
-      foodFactor *= 1.25;
-    }
-    if (factors.veryHungry) {
-      foodFactor *= 1.5;
-    }
-    if (factors.thirsty) {
-      drinkFactor *= 1.35;
-    }
-    const multiplier = days * totalPeople;
-    const steakKg = 0.25 * multiplier * foodFactor;
-    const sausages = 2 * multiplier * foodFactor;
-    const baconKg = 0.15 * multiplier * foodFactor;
-    const beerLiters = 3.5 * multiplier * drinkFactor;
-    document.getElementById("headline").innerText =
-      "Mengen für " + name + " + Gruppe";
-    document.getElementById("steak").innerText = steakKg.toFixed(1);
-    document.getElementById("sausages").innerText = Math.ceil(sausages);
-    document.getElementById("bacon").innerText = baconKg.toFixed(1);
-    document.getElementById("beer").innerText = beerLiters.toFixed(1);
-  }
-  calculate();
+    if (person.diet) foodFactor *= 0.7;
+    if (person.hungry) foodFactor *= 1.25;
+    if (person.veryHungry) foodFactor *= 1.5;
+    if (person.thirsty) drinkFactor *= 1.35;
+    totalSteak += 0.25 * days * foodFactor;
+    totalSausages += 2 * days * foodFactor;
+    totalBacon += 0.15 * days * foodFactor;
+    totalBeer += 3.5 * days * drinkFactor;
+  });
+  document.getElementById("totalSteak").innerText = totalSteak.toFixed(1);
+  document.getElementById("totalSausages").innerText = Math.ceil(totalSausages);
+  document.getElementById("totalBacon").innerText = totalBacon.toFixed(1);
+  document.getElementById("totalBeer").innerText = totalBeer.toFixed(1);
+}
+addPerson();
 </script>
 </body>
 </html>
