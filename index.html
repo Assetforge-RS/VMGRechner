@@ -1,5 +1,4 @@
-VMG Code mit mehreren Personen-Zeilen, individuellen Tagen und Faktoren je Person:
-
+VMG Code mit mehreren Personen-Zeilen, individuellen Tagen und Faktoren je Person
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -8,8 +7,12 @@ VMG Code mit mehreren Personen-Zeilen, individuellen Tagen und Faktoren je Perso
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Grill-Rechner">
 <title>Grill-Rechner</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
 body {
   margin: 0;
   padding: env(safe-area-inset-top) 14px env(safe-area-inset-bottom) 14px;
@@ -17,8 +20,11 @@ body {
   background: #f2f2f7;
   color: #1c1c1e;
 }
+
 .app { max-width: 520px; margin: auto; padding-bottom: 30px; }
+
 h1 { text-align: center; font-size: 28px; }
+
 .card {
   background: white;
   border-radius: 22px;
@@ -26,6 +32,7 @@ h1 { text-align: center; font-size: 28px; }
   margin-bottom: 14px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
+
 .person {
   border: 1px solid #ddd;
   border-radius: 18px;
@@ -33,11 +40,13 @@ h1 { text-align: center; font-size: 28px; }
   margin-bottom: 14px;
   background: #fafafa;
 }
+
 .row {
   display: grid;
   grid-template-columns: 1fr 90px;
   gap: 10px;
 }
+
 input {
   width: 100%;
   min-height: 44px;
@@ -46,18 +55,21 @@ input {
   border: 1px solid #ccc;
   padding: 10px;
 }
+
 label {
   font-weight: 700;
   font-size: 14px;
   margin-top: 10px;
   display: block;
 }
+
 .factor-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
   margin-top: 10px;
 }
+
 button {
   min-height: 46px;
   border-radius: 14px;
@@ -66,25 +78,37 @@ button {
   font-weight: 700;
   background: #e5e5ea;
 }
+
 button.active {
   background: #1c1c1e;
   color: white;
 }
+
 .add {
   width: 100%;
   background: #007aff;
   color: white;
   margin-top: 8px;
 }
+
+.pdf {
+  width: 100%;
+  background: #34c759;
+  color: white;
+  margin-top: 12px;
+}
+
 .delete {
   background: #ff3b30;
   color: white;
   width: 100%;
   margin-top: 10px;
 }
+
 .result {
   background: #fff7e8;
 }
+
 .item {
   display: flex;
   justify-content: space-between;
@@ -92,47 +116,74 @@ button.active {
   padding: 12px 0;
   font-size: 18px;
 }
+
 .item strong { font-size: 20px; }
+
 .small {
   font-size: 13px;
   color: #666;
   margin-top: 12px;
+  line-height: 1.4;
 }
 </style>
 </head>
+
 <body>
+
 <div class="app">
   <h1>🔥 Grill-Rechner</h1>
+
   <div class="card">
     <h2>Teilnehmer</h2>
     <div id="peopleList"></div>
     <button class="add" onclick="addPerson()">+ Person hinzufügen</button>
   </div>
+
   <div class="card result">
     <h2>Gesamtsumme</h2>
+
     <div class="item">
       <span>Hüftsteak</span>
       <strong><span id="totalSteak">0</span> kg</strong>
     </div>
+
     <div class="item">
       <span>Würstchen</span>
       <strong><span id="totalSausages">0</span> Stück</strong>
     </div>
+
     <div class="item">
       <span>Bauchspeck</span>
       <strong><span id="totalBacon">0</span> kg</strong>
     </div>
+
     <div class="item">
       <span>Bier</span>
       <strong><span id="totalBeer">0</span> Liter</strong>
     </div>
+
+    <div class="item">
+      <span>Fleisch gesamt</span>
+      <strong><span id="totalMeat">0</span> kg</strong>
+    </div>
+
+    <div class="item">
+      <span>Kühlschränke / Kühlboxen</span>
+      <strong><span id="totalFridges">0</span></strong>
+    </div>
+
     <p class="small">
       Basis pro Person und Tag: 250 g Hüftsteak, 2 Würstchen, 150 g Bauchspeck, 3,5 Liter Bier.
+      Würstchen werden mit 80 g pro Stück gerechnet. Ein Kühlschrank/Kühlbox wird grob mit 12 kg Fleisch kalkuliert.
     </p>
+
+    <button class="pdf" onclick="exportPDF()">📄 PDF exportieren</button>
   </div>
 </div>
+
 <script>
 let people = [];
+
 function addPerson() {
   people.push({
     name: "",
@@ -142,29 +193,36 @@ function addPerson() {
     veryHungry: false,
     thirsty: false
   });
+
   renderPeople();
   calculate();
 }
+
 function deletePerson(index) {
   people.splice(index, 1);
   renderPeople();
   calculate();
 }
+
 function updatePerson(index, field, value) {
   people[index][field] = value;
   calculate();
 }
+
 function toggleFactor(index, factor) {
   people[index][factor] = !people[index][factor];
   renderPeople();
   calculate();
 }
+
 function renderPeople() {
   const list = document.getElementById("peopleList");
   list.innerHTML = "";
+
   people.forEach((person, index) => {
     const div = document.createElement("div");
     div.className = "person";
+
     div.innerHTML = `
       <div class="row">
         <div>
@@ -176,6 +234,7 @@ function renderPeople() {
             oninput="updatePerson(${index}, 'name', this.value)"
           >
         </div>
+
         <div>
           <label>Tage</label>
           <input 
@@ -187,41 +246,165 @@ function renderPeople() {
           >
         </div>
       </div>
+
       <div class="factor-grid">
         <button class="${person.diet ? "active" : ""}" onclick="toggleFactor(${index}, 'diet')">🥗 Diät</button>
         <button class="${person.hungry ? "active" : ""}" onclick="toggleFactor(${index}, 'hungry')">🥩 Hungrig</button>
         <button class="${person.veryHungry ? "active" : ""}" onclick="toggleFactor(${index}, 'veryHungry')">🔥 Sehr hungrig</button>
         <button class="${person.thirsty ? "active" : ""}" onclick="toggleFactor(${index}, 'thirsty')">🍺 Durstig</button>
       </div>
+
       <button class="delete" onclick="deletePerson(${index})">Person löschen</button>
     `;
+
     list.appendChild(div);
   });
 }
+
+function getPersonResult(person) {
+  const days = Number(person.days) || 1;
+
+  let foodFactor = 1;
+  let drinkFactor = 1;
+
+  if (person.diet) foodFactor *= 0.7;
+  if (person.hungry) foodFactor *= 1.25;
+  if (person.veryHungry) foodFactor *= 1.5;
+  if (person.thirsty) drinkFactor *= 1.35;
+
+  const steak = 0.25 * days * foodFactor;
+  const sausages = 2 * days * foodFactor;
+  const bacon = 0.15 * days * foodFactor;
+  const beer = 3.5 * days * drinkFactor;
+  const meat = steak + bacon + (sausages * 0.08);
+
+  return {
+    name: person.name || "Unbenannt",
+    days,
+    steak,
+    sausages,
+    bacon,
+    beer,
+    meat,
+    factors: [
+      person.diet ? "Diät" : "",
+      person.hungry ? "Hungrig" : "",
+      person.veryHungry ? "Sehr hungrig" : "",
+      person.thirsty ? "Durstig" : ""
+    ].filter(Boolean).join(", ") || "Normal"
+  };
+}
+
 function calculate() {
   let totalSteak = 0;
   let totalSausages = 0;
   let totalBacon = 0;
   let totalBeer = 0;
+  let totalMeat = 0;
+
   people.forEach(person => {
-    const days = Number(person.days) || 1;
-    let foodFactor = 1;
-    let drinkFactor = 1;
-    if (person.diet) foodFactor *= 0.7;
-    if (person.hungry) foodFactor *= 1.25;
-    if (person.veryHungry) foodFactor *= 1.5;
-    if (person.thirsty) drinkFactor *= 1.35;
-    totalSteak += 0.25 * days * foodFactor;
-    totalSausages += 2 * days * foodFactor;
-    totalBacon += 0.15 * days * foodFactor;
-    totalBeer += 3.5 * days * drinkFactor;
+    const r = getPersonResult(person);
+
+    totalSteak += r.steak;
+    totalSausages += r.sausages;
+    totalBacon += r.bacon;
+    totalBeer += r.beer;
+    totalMeat += r.meat;
   });
+
+  const fridgeCapacityKg = 12;
+  const fridgesNeeded = totalMeat > 0 ? Math.ceil(totalMeat / fridgeCapacityKg) : 0;
+
   document.getElementById("totalSteak").innerText = totalSteak.toFixed(1);
   document.getElementById("totalSausages").innerText = Math.ceil(totalSausages);
   document.getElementById("totalBacon").innerText = totalBacon.toFixed(1);
   document.getElementById("totalBeer").innerText = totalBeer.toFixed(1);
+  document.getElementById("totalMeat").innerText = totalMeat.toFixed(1);
+  document.getElementById("totalFridges").innerText = fridgesNeeded;
 }
+
+function exportPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  let y = 15;
+
+  let totalSteak = 0;
+  let totalSausages = 0;
+  let totalBacon = 0;
+  let totalBeer = 0;
+  let totalMeat = 0;
+  let totalPersonDays = 0;
+
+  doc.setFontSize(18);
+  doc.text("Grill-Rechner Auswertung", 14, y);
+  y += 10;
+
+  doc.setFontSize(10);
+  doc.text("Erstellt am: " + new Date().toLocaleDateString("de-DE"), 14, y);
+  y += 10;
+
+  doc.setFontSize(14);
+  doc.text("1. Namensliste und Tage", 14, y);
+  y += 8;
+
+  doc.setFontSize(10);
+
+  people.forEach((person, index) => {
+    const r = getPersonResult(person);
+
+    totalSteak += r.steak;
+    totalSausages += r.sausages;
+    totalBacon += r.bacon;
+    totalBeer += r.beer;
+    totalMeat += r.meat;
+    totalPersonDays += r.days;
+
+    doc.text(`${index + 1}. ${r.name}`, 14, y);
+    doc.text(`${r.days} Tag(e)`, 80, y);
+    doc.text(`${r.factors}`, 120, y);
+    y += 7;
+
+    if (y > 275) {
+      doc.addPage();
+      y = 15;
+    }
+  });
+
+  y += 6;
+  doc.setFontSize(14);
+  doc.text("2. Einkaufsliste gesamt", 14, y);
+  y += 8;
+
+  doc.setFontSize(11);
+  doc.text(`Hüftsteak: ${totalSteak.toFixed(1)} kg`, 14, y); y += 7;
+  doc.text(`Würstchen: ${Math.ceil(totalSausages)} Stück`, 14, y); y += 7;
+  doc.text(`Bauchspeck: ${totalBacon.toFixed(1)} kg`, 14, y); y += 7;
+  doc.text(`Bier: ${totalBeer.toFixed(1)} Liter`, 14, y); y += 7;
+  doc.text(`Fleisch gesamt inkl. Würstchen: ${totalMeat.toFixed(1)} kg`, 14, y); y += 10;
+
+  const fridgeCapacityKg = 12;
+  const fridgesNeeded = totalMeat > 0 ? Math.ceil(totalMeat / fridgeCapacityKg) : 0;
+
+  doc.setFontSize(14);
+  doc.text("3. Kühlschrank-Schätzung", 14, y);
+  y += 8;
+
+  doc.setFontSize(11);
+  doc.text(`Annahme: ca. ${fridgeCapacityKg} kg Fleisch pro Kühlschrank/Kühlbox`, 14, y); y += 7;
+  doc.text(`Empfehlung: ${fridgesNeeded} Kühlschrank/Kühlbox(en) einplanen`, 14, y); y += 10;
+
+  doc.setFontSize(9);
+  doc.text("Hinweise:", 14, y); y += 6;
+  doc.text("- Basis: 250 g Hüftsteak, 2 Würstchen, 150 g Bauchspeck und 3,5 l Bier pro Person und Tag.", 14, y); y += 5;
+  doc.text("- Würstchen wurden pauschal mit 80 g pro Stück gerechnet.", 14, y); y += 5;
+  doc.text("- Die Kühlschrank-Schätzung ist eine grobe Planungshilfe.", 14, y);
+
+  doc.save("grill-rechner-auswertung.pdf");
+}
+
 addPerson();
 </script>
+
 </body>
 </html>
