@@ -1,0 +1,223 @@
+Klar — hier der komplette HTML-Code als iPhone-optimierte Safari-Web-App:
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Grill-Rechner">
+  <meta name="theme-color" content="#f2f2f7">
+  <title>Grill-Rechner</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      margin: 0;
+      padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif;
+      background: #f2f2f7;
+      color: #1c1c1e;
+    }
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 0 32px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    h1 {
+      text-align: center;
+      font-size: 30px;
+      margin: 12px 0 20px;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+    label {
+      display: block;
+      font-weight: 700;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+    input[type="text"] {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      border: 1px solid #d1d1d6;
+      border-radius: 14px;
+      font-size: 16px;
+      background: #fff;
+    }
+    input[type="range"] {
+      width: 100%;
+      margin-top: 8px;
+    }
+    .value {
+      font-size: 20px;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    button {
+      min-height: 52px;
+      padding: 12px;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      background: #e5e5ea;
+      color: #1c1c1e;
+    }
+    button.active {
+      background: #1c1c1e;
+      color: #ffffff;
+    }
+    .result {
+      background: #fff7e8;
+    }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      padding: 13px 0;
+      font-size: 18px;
+    }
+    .item:last-child {
+      border-bottom: none;
+    }
+    .item strong {
+      font-size: 20px;
+    }
+    .hint {
+      font-size: 13px;
+      color: #6e6e73;
+      line-height: 1.4;
+      margin-top: 14px;
+    }
+    .total {
+      text-align: center;
+      font-size: 17px;
+      font-weight: 700;
+      margin-top: 10px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <h1>🔥 Grill-Rechner</h1>
+  <div class="card">
+    <h2>Person & Dauer</h2>
+    <label for="name">Name</label>
+    <input type="text" id="name" placeholder="z. B. Kai" oninput="calculate()">
+    <label for="days">Wie viele Tage bleibst du?</label>
+    <input type="range" id="days" min="1" max="14" value="1" oninput="calculate()">
+    <div class="value"><span id="daysValue">1</span> Tag(e)</div>
+    <label for="extraPeople">Weitere Leute, die du mitbringst</label>
+    <input type="range" id="extraPeople" min="0" max="20" value="0" oninput="calculate()">
+    <div class="value">+ <span id="extraPeopleValue">0</span> Person(en)</div>
+    <div class="total">
+      Gesamt: <span id="totalPeopleValue">1</span> Person(en)
+    </div>
+  </div>
+  <div class="card">
+    <h2>Faktoren</h2>
+    <div class="buttons">
+      <button id="diet" onclick="toggleFactor('diet')">🥗 Diät</button>
+      <button id="hungry" onclick="toggleFactor('hungry')">🥩 Hungrig</button>
+      <button id="veryHungry" onclick="toggleFactor('veryHungry')">🔥 Sehr hungrig</button>
+      <button id="thirsty" onclick="toggleFactor('thirsty')">🍺 Durstig</button>
+    </div>
+    <p class="hint">
+      Die Faktoren passen die Mengen automatisch an. Diät reduziert Essen, hungrig und sehr hungrig erhöhen Essen, durstig erhöht Bier.
+    </p>
+  </div>
+  <div class="card result">
+    <h2 id="headline">Mengen</h2>
+    <div class="item">
+      <span>Hüftsteak</span>
+      <strong><span id="steak">0</span> kg</strong>
+    </div>
+    <div class="item">
+      <span>Würstchen</span>
+      <strong><span id="sausages">0</span> Stück</strong>
+    </div>
+    <div class="item">
+      <span>Bauchspeck</span>
+      <strong><span id="bacon">0</span> kg</strong>
+    </div>
+    <div class="item">
+      <span>Bier</span>
+      <strong><span id="beer">0</span> Liter</strong>
+    </div>
+    <p class="hint">
+      Basis pro Person und Tag: 250 g Hüftsteak, 2 Würstchen, 150 g Bauchspeck und 3,5 Liter Bier.
+    </p>
+  </div>
+</div>
+<script>
+  const factors = {
+    diet: false,
+    hungry: false,
+    veryHungry: false,
+    thirsty: false
+  };
+  function toggleFactor(factor) {
+    factors[factor] = !factors[factor];
+    document.getElementById(factor).classList.toggle("active");
+    calculate();
+  }
+  function calculate() {
+    const name = document.getElementById("name").value.trim() || "Grillfreund";
+    const days = Number(document.getElementById("days").value);
+    const extraPeople = Number(document.getElementById("extraPeople").value);
+    const totalPeople = 1 + extraPeople;
+    document.getElementById("daysValue").innerText = days;
+    document.getElementById("extraPeopleValue").innerText = extraPeople;
+    document.getElementById("totalPeopleValue").innerText = totalPeople;
+    let foodFactor = 1;
+    let drinkFactor = 1;
+    if (factors.diet) {
+      foodFactor *= 0.7;
+    }
+    if (factors.hungry) {
+      foodFactor *= 1.25;
+    }
+    if (factors.veryHungry) {
+      foodFactor *= 1.5;
+    }
+    if (factors.thirsty) {
+      drinkFactor *= 1.35;
+    }
+    const multiplier = days * totalPeople;
+    const steakKg = 0.25 * multiplier * foodFactor;
+    const sausages = 2 * multiplier * foodFactor;
+    const baconKg = 0.15 * multiplier * foodFactor;
+    const beerLiters = 3.5 * multiplier * drinkFactor;
+    document.getElementById("headline").innerText =
+      "Mengen für " + name + " + Gruppe";
+    document.getElementById("steak").innerText = steakKg.toFixed(1);
+    document.getElementById("sausages").innerText = Math.ceil(sausages);
+    document.getElementById("bacon").innerText = baconKg.toFixed(1);
+    document.getElementById("beer").innerText = beerLiters.toFixed(1);
+  }
+  calculate();
+</script>
+</body>
+</html>
